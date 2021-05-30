@@ -58,7 +58,7 @@ class SearchPage extends React.Component{
           <ol className="books-grid">
             {updatedBooks.filter((book)=>{
               return book.imageLinks&&book.imageLinks.thumbnail}).map((book)=>(
-              <Book book={book} changeShelf={changeShelf}/>
+              <Book key={book.id} book={book} changeShelf={changeShelf}/>
             ))}
           </ol>
 
