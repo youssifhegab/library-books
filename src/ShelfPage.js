@@ -5,16 +5,16 @@ import Book from './Book'
 
 
 class ShelfPage extends React.Component{
-  shelfType = [
-    {id:"1", title:"Currently Reading", type:'currentlyReading'},
-    {id:"2", title:"Want to Read", type:'wantToRead'},
-    {id:"3", title:"Read", type:'read'}
-  ]
   static propTypes = {
     books: PropTypes.array.isRequired,
     changingBooks: PropTypes.func.isRequired
   }
   render(){
+      const shelfType = [
+        {id:"1", title:"Currently Reading", type:'currentlyReading'},
+        {id:"2", title:"Want to Read", type:'wantToRead'},
+        {id:"3", title:"Read", type:'read'}
+      ]
       const {books, changingBooks} = this.props
       const changeShelf = (event, book)=>{changingBooks(book, event.target.value)}
       return(
@@ -23,7 +23,7 @@ class ShelfPage extends React.Component{
             <h1>MyReads</h1>
           </div>
           <div className="list-books-content">
-            {this.shelfType.map((shelf)=>{
+            {shelfType.map((shelf)=>{
               const shelfBooks = books.filter(book => book.shelf === shelf.type);
               return(
               <div className="bookshelf" key={shelf.id}>
