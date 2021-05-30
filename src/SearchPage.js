@@ -45,15 +45,16 @@ class SearchPage extends React.Component{
         </div>
         <div className="search-books-results">
           <ol className="books-grid">
-            {newBooks.map((book)=>(
+            {newBooks.filter((book)=>{
+              return book.imageLinks&&book.imageLinks.thumbnail}).map((book)=>(
               <li key={book.id}>
                 <div className="book">
                   <div className="book-top">
                     <div className="book-cover" style={{ width: 128, height: 193, 
-                      backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
+                      backgroundImage: `url(${book.imageLinks&&book.imageLinks.thumbnail})`}}></div>
                     <div className="book-shelf-changer">
-                      <select onChange={(event)=>changeShelf(event, book)} defaultValue='none'>
-                        <option value="move" disabled>Move to...</option>
+                      <select onChange={(event)=>changeShelf(event, book)} defaultValue="none">
+                        <option value="none" disabled>Move to...</option>
                         <option value="currentlyReading">Currently Reading</option>
                         <option value="wantToRead">Want to Read</option>
                         <option value="read">Read</option>
@@ -61,6 +62,12 @@ class SearchPage extends React.Component{
                       </select>
                     </div>
                   </div>
+                </div>
+                <div>
+                  <div className="book-title">{book.title ? book.title : 'No title available'}</div>
+                  {book.authors && book.authors.map((author, index) => (
+                      <div className="book-authors" key={index}>{author}</div>
+                  ))}
                 </div>
               </li>
             ))}

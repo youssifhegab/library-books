@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
-import NoCover from './images/no-cover.png'
 
 
 class ShelfPage extends React.Component{
@@ -35,10 +34,10 @@ class ShelfPage extends React.Component{
                         <div className="book">
                           <div className="book-top">
                             <div className="book-cover" style={{ width: 128, height: 193, 
-                              backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
+                              backgroundImage: `url(${book.imageLinks&&book.imageLinks.thumbnail})`}}></div>
                             <div className="book-shelf-changer">
                               <select onChange={(event)=>changeShelf(event, book)} defaultValue='none'>
-                                <option value="move" disabled>Move to...</option>
+                                <option value="none" disabled>Move to...</option>
                                 <option value="currentlyReading">Currently Reading</option>
                                 <option value="wantToRead">Want to Read</option>
                                 <option value="read">Read</option>
@@ -48,10 +47,10 @@ class ShelfPage extends React.Component{
                           </div>
                         </div>
                         <div>
-                            <div className="book-title">{book.title}</div>
-                            {book.authors.map((author)=>(
-                              <div className="book-authors">{author}</div>
-                            ))}
+                          <div className="book-title">{book.title ? book.title : 'No title available'}</div>
+                          {book.authors && book.authors.map((author, index) => (
+                              <div className="book-authors" key={index}>{author}</div>
+                          ))}
                         </div>
                       </li>
                     ))}

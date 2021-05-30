@@ -183,7 +183,20 @@ button:active {
   height: 100%;
   opacity: 0;
   cursor: pointer;
+  
 }
+
+.book-shelf-changer:hover {
+  background-color: rgb(0, 102, 0);
+} 
+
+select option {
+  color:#000;
+  background-color: #d6d6c2;
+}
+/* select option:hover {
+  background-color: red;
+} */
 
 /* book cover */
 
