@@ -1,35 +1,75 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {Link} from 'react-router-dom'
+import * as BooksAPI from './BooksAPI'
 
 class SearchPage extends React.Component{
-    render(){
-        return(
-            <div className="search-books">
-            <div className="search-books-bar">
-              <Link 
-                className="close-search" 
-                to='/'
-                >Close</Link>
-              <div className="search-books-input-wrapper">
-                {/*
-                  NOTES: The search from BooksAPI is limited to a particular set of search terms.
-                  You can find these search terms here:
-                  https://github.com/udacity/reactnd-project-myreads-starter/blob/master/SEARCH_TERMS.md
+  state = {
+    query: '',
+    newBooks:[],
+  }
+  static propTypes = {
+    books: PropTypes.array.isRequired,
+    changingBooks: PropTypes.func.isRequired
+  }
 
-                  However, remember that the BooksAPI.search method DOES search by title or author. So, don't worry if
-                  you don't find a specific author or title. Every search is limited by search terms.
-                */}
-                <input type="text" placeholder="Search by title or author"/>
+  gettingBooks= (event)=>{
+    const query = event.target.value
+    this.setState((currState)=>({query}))
 
-              </div>
-            </div>
-            <div className="search-books-results">
-              <ol className="books-grid"></ol>
-            </div>
-          </div>
-        )
+    if(query){
+      BooksAPI.search(query.trim(), 20).then((res)=>{
+        res.length > 0?this.setState((currState)=>({newBooks: res})):
+        this.setState((currState)=>({newBooks:[]}))
+      })
+    }else{
+      this.setState((currState)=>({newBooks:[]}))
     }
+
+  }
+
+  render(){
+    const {changingBooks} = this.props
+    const { query, newBooks} = this.state;
+    const changeShelf = (event, book) => changingBooks(book, event.target.value)
+    return(
+        <div className="search-books">
+        <div className="search-books-bar">
+          <Link 
+            className="close-search" 
+            to='/'
+            >Close</Link>
+          <div className="search-books-input-wrapper">
+            <input type="text" placeholder="Search by title or author" value={query} onChange={this.gettingBooks}/>
+          </div>
+        </div>
+        <div className="search-books-results">
+          <ol className="books-grid">
+            {newBooks.map((book)=>(
+              <li key={book.id}>
+                <div className="book">
+                  <div className="book-top">
+                    <div className="book-cover" style={{ width: 128, height: 193, 
+                      backgroundImage: `url(${book.imageLinks.thumbnail})`}}></div>
+                    <div className="book-shelf-changer">
+                      <select onChange={(event)=>changeShelf(event, book)} defaultValue='none'>
+                        <option value="move" disabled>Move to...</option>
+                        <option value="currentlyReading">Currently Reading</option>
+                        <option value="wantToRead">Want to Read</option>
+                        <option value="read">Read</option>
+                        <option value="none">None</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
+
+        </div>
+      </div>
+    )
+  }
 }
 
 export default SearchPage
